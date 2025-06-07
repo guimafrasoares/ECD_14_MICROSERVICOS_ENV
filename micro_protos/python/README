@@ -1,0 +1,4 @@
+Serviço funciona como cliente/servidor
+
+para gerar os códigos python através do arquivo .proto, é necessario rodar a seguinte linha de comando dentro da pasta python.
+python -m grpc_tools.protoc -I../protos --python_out=. --pyi_out=. -- grpc_python_out=. ../protos/olamundo.proto

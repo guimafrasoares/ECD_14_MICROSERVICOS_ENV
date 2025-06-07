@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package agenda_grpc;
+
+// --- Enumerações ---
+
+enum TipoTelefone {
+    TIPO_TELEFONE_INDEFINIDO = 0; //Valor Padrão
+    TIPO_MOVEL = 1;
+    TIPO_FIXO = 2;
+    TIPO_COMERCIAL = 3;
+}
+
+enum CategoriaContato {
+    CATEGORIA_CONTATO_INDEFINIDO = 0; //Valor Padrão
+    CATEGORIA_AMIGO = 1;
+    CATEGORIA_FAMILIA = 2;
+    CATEGORIA_COMERCIAL = 3;
+    CATEGORIA_OUTROS = 4;
+}
+
+// --- Definição Mensagens ---
+
+// Estrutura Telefone
+message Telefone {
+    string numero = 1;
+    TipoTelefone tipo = 2;
+}
+
+// Estrutura Contato
+message Contato {
+    string id = 1;
+    string nome = 2;
+    string email = 3;
+    repeated Telefone telefones = 4;
+    CategoriaContato categoria = 5;
+}
+
+// Retorna todos os contatos da Lista de Contatos
+message ListaContatos {
+    repeated Contato contatos = 1;
+}
+
+// Retorna Sucesso da Resposta
+message StatusResposta {
+    bool sucesso = 1;
+    string mensagem = 2;
+}
+
+// Retorna id do contato
+message ConsultarContatoRequest {
+    string id = 1;
+}
+
+// Requisição para listar contatos, permitido filtragem opcional
+message ListarContatosRequest {
+    CategoriaContato categoria = 1; //Campo opcional para retornar por categoria
+    string nome = 2; //Campo opcional para retornar por nome
+}
+
+// --- Definição do Serviço gRPC ---
+service AgendaService {
+    rpc AdicionarContato (Contato) returns (StatusResposta) {}
+    rpc ConsultarContato (ConsultarContatoRequest) returns (Contato) {}
+    rpc ListarContatos (ListarContatosRequest) returns (ListaContatos) {}
+}
