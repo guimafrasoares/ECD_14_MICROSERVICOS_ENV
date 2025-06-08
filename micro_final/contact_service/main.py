@@ -1,7 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from contato import Contato, TipoTelefone, Categoria
+import re
+import os
 
 app = FastAPI()
+
+CONTACT_SERVICE_URL = os.getenv("CONTACT_SERVICE_URL", "http://contact_service:8002")
 
 contatos_db = {
     1: Contato(id=1, nome="Maria", telefone="54 99999-9999", tipoTelefone=TipoTelefone.MOVEL, categoria=Categoria.FAMILIA),
@@ -34,5 +38,10 @@ def create_contato(contato: Contato):
     """
     if contato.id in contatos_db:
         raise HTTPException(status_code=400, detail="Contato com este ID já existe")
+    
+    if re.match(r'[A-Za-z]', contato.telefone):
+        raise HTTPException(status_code=400, detail="Número de telefone inválido")
+
     contatos_db[contato.id] = contato
+
     return {"message": "Contato criado com sucesso", "contato": contato}

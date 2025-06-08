@@ -1,0 +1,39 @@
+# --- Tipos de Dados ---
+
+type Contato {
+  id: Int!
+  nome: String!
+  telefone: String!
+  tipoTelefone: Int!
+  categoria: Int!
+}
+
+# --- Input Types para Mutações ---
+
+input ContatoInput {
+  id: Int!
+  nome: String!
+  telefone: String!
+  tipoTelefone: Int!
+  categoria: Int!
+}
+
+# --- Queries (Buscas de Dados) ---
+
+type Query {
+  contatos: [Contato!]!
+  contato(id: Int!): Contato
+}
+
+# --- Mutations (Alterações de Dados) ---
+
+type Mutation {
+  createContato(input: ContatoInput!): ContatoResponse!
+}
+
+# --- Respostas de Mutação ---
+
+type ContatoResponse {
+  message: String!
+  contato: Contato
+}

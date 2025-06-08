@@ -1,0 +1,25 @@
+services:
+  contact_service:
+    build:
+      context: ./contact_service
+      dockerfile: Dockerfile
+    container_name: contact_service_container
+    ports:
+      - "9002:8002" # Porta do host para o serviço de contatos
+    environment:
+      - PORT=8002
+    command: uvicorn main:app --host 0.0.0.0 --port 8002
+
+  graphql_api_gateway: # NOVO SERVIÇO
+    build:
+      context: ./graphql_api_gateway
+      dockerfile: Dockerfile
+    container_name: graphql_api_gateway_container
+    ports:
+      - "9004:9004" # Porta do host para o GraphQL Gateway
+    environment:
+      - CONTACT_SERVICE_URL=http://contact_service:8002 # Endereço interno do serviço de produtos
+      - PORT=9004
+    depends_on:
+      - contact_service # Depende do serviço de contatos
+    command: uvicorn main:app --host 0.0.0.0 --port 9004

@@ -1,0 +1,5 @@
+# execute com docker compose up --build  
+
+# acesse o gateway graphql em http://127.0.0.1:9004/graphql
+
+# termine os containers com CTRL+C
